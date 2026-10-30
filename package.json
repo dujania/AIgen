@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:pages": "npm run build && rm -rf docs && cp -r dist docs && touch docs/.nojekyll"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.3",
