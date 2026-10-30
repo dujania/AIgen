@@ -140,6 +140,11 @@ export default function JobDetail() {
                     Employer site <ArrowUpRight size={13} />
                   </a>
                 )}
+                {job.source === "sample" && (
+                  <p className="text-[10.5px] leading-snug text-[var(--color-muted)]">
+                    Sample listing — details are illustrative, and there is no external form.
+                  </p>
+                )}
               </div>
             </div>
 

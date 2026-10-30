@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Bookmark,
   Filter,
+  Info,
   Radio,
   RefreshCw,
   Search,
@@ -138,6 +139,12 @@ export default function JobsPage() {
           </>
         }
       />
+
+      <p className="mt-3 flex items-start gap-2 text-[11.5px] leading-relaxed text-[var(--color-muted)]">
+        <Info size={13} className="mt-0.5 flex-none" />
+        Curated roles are illustrative sample listings written for this demo — confirm details on
+        the employer's site. Live roles come from Remotive and always link to the original post.
+      </p>
 
       {/* search */}
       <div className="mt-6">

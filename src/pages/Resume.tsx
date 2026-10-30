@@ -166,7 +166,11 @@ export default function ResumePage() {
               <Share2 size={15} />
               Share link
             </button>
-            <button className="btn btn-primary" onClick={printResume}>
+            <button
+              className="btn btn-primary"
+              onClick={printResume}
+              title="Opens your browser's print dialog — choose “Save as PDF”"
+            >
               <Download size={15} />
               Export PDF
             </button>
