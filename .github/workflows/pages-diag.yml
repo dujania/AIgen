@@ -1,6 +1,9 @@
 name: Pages diagnostic
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - arena/cfc41448-aigen
 
 permissions:
   contents: write
