@@ -1,0 +1,55 @@
+=== GET /pages ===
+HTTP/2.0 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning
+Cache-Control: private, max-age=60, s-maxage=60
+Content-Security-Policy: default-src 'none'
+Content-Type: application/json; charset=utf-8
+Date: Fri, 30 Oct 2026 15:46:19 GMT
+Etag: W/"3336bbd87e766a2a6525e33753cae926ae3ec06b36209da0299a96cf991d6848"
+Last-Modified: Sat, 29 Aug 2026 14:59:45 GMT
+Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin
+Server: github.com
+Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+Vary: Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With
+X-Accepted-Github-Permissions: pages=read
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-Github-Api-Version-Selected: 2022-11-28
+X-Github-Edge-Region: iad
+X-Github-Media-Type: github.v3; format=json
+X-Github-Request-Id: 8451:14015C:BF6E41:2723CA2:6AE4BBCA
+X-Ratelimit-Limit: 5000
+X-Ratelimit-Remaining: 4992
+X-Ratelimit-Reset: 1793378628
+X-Ratelimit-Resource: core
+X-Ratelimit-Used: 8
+X-Xss-Protection: 0
+
+{"url":"https://api.github.com/repos/dujania/AIgen/pages","status":"built","cname":null,"custom_404":false,"html_url":"https://dujania.github.io/AIgen/","build_type":"legacy","source":{"branch":"arena/23e98f38-aigen","path":"/docs"},"public":true,"protected_domain_state":null,"pending_domain_unverified_at":null,"https_enforced":true}
+=== PUT /pages (build_type=workflow) ===
+HTTP/2.0 403 Forbidden
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning
+Content-Security-Policy: default-src 'none'
+Content-Type: application/json; charset=utf-8
+Date: Fri, 30 Oct 2026 15:46:19 GMT
+Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin
+Server: github.com
+Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+Vary: Accept-Encoding, Accept, X-Requested-With
+X-Accepted-Github-Permissions: pages=write,administration=write
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-Github-Api-Version-Selected: 2022-11-28
+X-Github-Edge-Region: iad
+X-Github-Media-Type: github.v3; format=json
+X-Github-Request-Id: 8452:C0385:AB9C0A:2306441:6AE4BBCB
+X-Ratelimit-Limit: 5000
+X-Ratelimit-Remaining: 4991
+X-Ratelimit-Reset: 1793378628
+X-Ratelimit-Resource: core
+X-Ratelimit-Used: 9
+X-Xss-Protection: 0
+
+{"message":"Resource not accessible by integration","documentation_url":"https://docs.github.com/rest/pages/pages#update-information-about-a-apiname-pages-site","status":"403"}gh: Resource not accessible by integration (HTTP 403)
