@@ -146,6 +146,43 @@ src/
 
 ---
 
+## Live deployment
+
+A production build is committed to `docs/` (relative asset paths, hash routing, `.nojekyll`), so
+the app can be served from any static host without rewrite rules. Regenerate it any time with:
+
+```bash
+npm run build:pages   # build + sync dist/ into docs/
+```
+
+### GitHub Pages (this repo)
+
+Pages for this repository is currently pointed at a different branch's `docs/` folder. To publish
+openrole instead, a repo admin needs to change one setting:
+
+1. **Settings → Pages → Build and deployment**
+2. Source: **Deploy from a branch**
+3. Branch: **`arena/cfc41448-aigen`**, folder **`/docs`** → **Save**
+
+The app then goes live at <https://dujania.github.io/AIgen/> within a minute. After this branch is
+merged, point the same setting at `main` + `/docs` so deployments follow the default branch.
+
+> Note: the connected GitHub integration only has `pages=read`, and changing Pages settings
+> requires `pages=write` + `administration=write`, so the app cannot flip this setting itself.
+
+### Any other static host
+
+| Host | Setup |
+| --- | --- |
+| Netlify / Cloudflare Pages / Vercel | Build command `npm run build`, publish directory `dist` |
+| S3 / nginx / Apache | Upload `dist/`; no SPA rewrites needed because routing is hash-based (`#/jobs`) |
+| Local | `npm run build && npx serve dist` |
+
+The build has no server-side dependencies, no environment variables, and no database, so any
+static file host will do.
+
+---
+
 ## Privacy in one line
 
 Your résumé, saved roles and applications never leave the browser unless you explicitly copy a
