@@ -1,70 +1,38 @@
-import type { CSSProperties } from "react";
-import SnakeGame from "./components/SnakeGame";
+import { useEffect, useState } from 'react';
+import { Anchor, ArrowRight, BookOpen, ChevronDown, Compass, Gamepad2, Map, Menu, Search, Skull, Sparkles, X } from 'lucide-react';
 
-const FIREFLIES = Array.from({ length: 14 }).map((_, i) => ({
-  left: `${(i * 37 + 11) % 97}%`,
-  top: `${(i * 53 + 19) % 93}%`,
-  size: 2 + (i % 3),
-  dur: `${5.5 + (i % 5) * 1.7}s`,
-  del: `${(i * 0.9) % 6}s`,
-}));
-
-export default function App() {
-  return (
-    <div className="relative h-full overflow-hidden scanlines">
-      {/* layered night-garden backdrop */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(1100px 700px at 18% -10%, rgba(44,90,58,0.55), transparent 60%)," +
-            "radial-gradient(900px 620px at 100% 15%, rgba(29,74,44,0.5), transparent 62%)," +
-            "radial-gradient(1000px 800px at 50% 118%, rgba(18,48,32,0.65), transparent 60%)," +
-            "linear-gradient(180deg, #0a1c11 0%, #07130d 55%, #050e09 100%)",
-        }}
-      />
-      {/* faint giant checkerboard */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          background:
-            "repeating-conic-gradient(#a8f03e 0% 25%, transparent 0% 50%) 0 0 / 96px 96px",
-          maskImage: "radial-gradient(ellipse at 50% 42%, black 30%, transparent 78%)",
-          WebkitMaskImage: "radial-gradient(ellipse at 50% 42%, black 30%, transparent 78%)",
-        }}
-      />
-      {/* drifting fireflies */}
-      <div aria-hidden className="absolute inset-0 overflow-hidden">
-        {FIREFLIES.map((f, i) => (
-          <span
-            key={i}
-            className="firefly"
-            style={
-              {
-                left: f.left,
-                top: f.top,
-                width: f.size,
-                height: f.size,
-                "--dur": f.dur,
-                "--del": f.del,
-              } as CSSProperties
-            }
-          />
-        ))}
-      </div>
-      {/* vignette */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(2,8,5,0.55) 100%)",
-        }}
-      />
-
-      <SnakeGame />
-    </div>
-  );
+const img = (name:string) => `https://onepiece.fandom.com/wiki/Special:FilePath/${encodeURIComponent(name)}?width=700`;
+const characters = [
+ {name:'Monkey D. Luffy', role:'CAPTAIN', epithet:'Straw Hat Luffy', image:img('Monkey D. Luffy Anime Post Timeskip Infobox.png'), color:'#df9d6b', story:'A free-spirited pirate from the East Blue, Luffy set sail to find the legendary One Piece and become King of the Pirates. With his rubber powers, unbreakable will, and unwavering faith in his friends, he gathered the Straw Hat crew and challenged the greatest powers on the seas.', bounty:'3,000,000,000', origin:'Foosha Village'},
+ {name:'Roronoa Zoro', role:'SWORDSMAN', epithet:'Pirate Hunter', image:img('Roronoa Zoro Anime Post Timeskip Infobox.png'), color:'#839b79', story:'Once a feared bounty hunter, Zoro became the first to join Luffy’s crew. A master of the three-sword style, he sails the Grand Line in pursuit of his promise to become the world’s greatest swordsman.', bounty:'1,111,000,000', origin:'Shimotsuki Village'},
+ {name:'Nami', role:'NAVIGATOR', epithet:'Cat Burglar', image:img('Nami Anime Post Timeskip Infobox.png'), color:'#e8b684', story:'A brilliant navigator and cartographer, Nami dreams of drawing a map of the entire world. After Luffy freed her home from Arlong, she found a new family with the Straw Hats.', bounty:'366,000,000', origin:'Cocoyasi Village'},
+ {name:'Sanji', role:'COOK', epithet:'Black Leg', image:img('Sanji Anime Post Timeskip Infobox.png'), color:'#d2bd8c', story:'The Straw Hats’ chivalrous chef fights with powerful kicks and dreams of finding the All Blue, a legendary sea where fish from every ocean meet.', bounty:'1,032,000,000', origin:'North Blue'},
+ {name:'Tony Tony Chopper', role:'DOCTOR', epithet:'Cotton Candy Lover', image:img('Tony Tony Chopper Anime Post Timeskip Infobox.png'), color:'#c99c86', story:'A reindeer who ate the Human-Human Fruit, Chopper learned medicine on Drum Island. He joined the crew to see the world and become a doctor who can cure any disease.', bounty:'1,000', origin:'Drum Island'},
+ {name:'Nico Robin', role:'ARCHAEOLOGIST', epithet:'Devil Child', image:img('Nico Robin Anime Post Timeskip Infobox.png'), color:'#9d9aab', story:'The last survivor of Ohara, Robin can read the ancient Poneglyphs. Her journey with the Straw Hats gives her a place to belong as she seeks the truth of the Void Century.', bounty:'930,000,000', origin:'Ohara'},
+];
+const islands = [
+ {name:'Wano Country', type:'Yonko territory', sea:'NEW WORLD', x:72, y:40, icon:'⛩', desc:'A secluded samurai nation once ruled by Kaido.'},
+ {name:'Whole Cake Island', type:'Yonko territory', sea:'NEW WORLD', x:58, y:64, icon:'♜', desc:'The heart of Totto Land and Big Mom’s territory.'},
+ {name:'Egghead', type:'Island', sea:'NEW WORLD', x:83, y:67, icon:'✦', desc:'The futuristic island of Dr. Vegapunk.'},
+ {name:'Marineford', type:'Island', sea:'PARADISE', x:39, y:40, icon:'⚓', desc:'The former headquarters of the Marines.'},
+ {name:'Alabasta', type:'Island', sea:'PARADISE', x:23, y:68, icon:'♟', desc:'A vast desert kingdom ruled by the Nefertari family.'},
+ {name:'Elbaf', type:'Island', sea:'NEW WORLD', x:87, y:25, icon:'♠', desc:'The legendary homeland of the giants.'},
+];
+const blocksInitial = ['3,1','5,1','7,1','1,3','3,3','5,3','7,3','9,3','1,5','3,5','5,5','7,5','9,5','3,7','5,7','7,7'];
+function Game({onClose}:{onClose:()=>void}) {
+ const [pos,setPos]=useState([1,1]); const [blocks,setBlocks]=useState(blocksInitial); const [bomb,setBomb]=useState<number[]|null>(null); const [blast,setBlast]=useState<string[]>([]); const [score,setScore]=useState(0); const [lost,setLost]=useState(false);
+ useEffect(()=>{const key=(e:KeyboardEvent)=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault(); if(lost)return; if(e.key===' '){setBomb(b=>b||pos);return} const d:Record<string,number[]>={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]}; if(d[e.key]) setPos(p=>{const x=p[0]+d[e.key][0],y=p[1]+d[e.key][1]; return x<1||x>9||y<1||y>7||(x%2===0&&y%2===0)||blocks.includes(`${x},${y}`)?p:[x,y]})};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[pos,blocks,lost]);
+ useEffect(()=>{if(!bomb)return; const t=setTimeout(()=>{const cells=[`${bomb[0]},${bomb[1]}`,...[[1,0],[-1,0],[0,1],[0,-1]].map(([x,y])=>`${bomb[0]+x},${bomb[1]+y}`)];setBlast(cells);setBlocks(b=>{setScore(s=>s+b.filter(v=>cells.includes(v)).length);return b.filter(v=>!cells.includes(v))});setPos(p=>{if(cells.includes(`${p[0]},${p[1]}`))setLost(true);return p});setBomb(null);setTimeout(()=>setBlast([]),450)},1200);return()=>clearTimeout(t)},[bomb]);
+ return <div className="overlay"><div className="modal game-modal"><button className="close" onClick={onClose}><X size={20}/></button><div className="eyebrow">✦ A LITTLE ADVENTURE ✦</div><h2>Straw Hat Blast</h2><p>Clear the crates, pirate! Move with arrow keys or WASD. Press space to drop a bomb—and get out of the way.</p><div className="game-meta"><span>CRATES CLEARED: {score}</span><button onClick={()=>{setPos([1,1]);setBlocks(blocksInitial);setBomb(null);setLost(false);setScore(0)}}>Restart ↻</button></div><div className="board">{Array.from({length:99},(_,i)=>{const x=i%11,y=Math.floor(i/11),k=`${x},${y}`,wall=x===0||x===10||y===0||y===8||(x%2===0&&y%2===0);return <div key={k} className={`tile ${wall?'wall':''} ${blocks.includes(k)?'crate':''} ${blast.includes(k)?'blast':''}`}>{pos[0]===x&&pos[1]===y?'👒':bomb?.[0]===x&&bomb?.[1]===y?'💣':blocks.includes(k)?'▧':''}</div>})}</div>{lost&&<div className="game-over">Caught in the blast! Hit restart to sail again.</div>}<div className="touch-controls"><button onClick={()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft'}))}>←</button><button onClick={()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowUp'}))}>↑</button><button onClick={()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown'}))}>↓</button><button onClick={()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight'}))}>→</button><button onClick={()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:' '}))}>💣</button></div></div></div>
+}
+export default function App(){
+ const [selected,setSelected]=useState<typeof characters[0]|null>(null); const [game,setGame]=useState(false); const [query,setQuery]=useState(''); const [filter,setFilter]=useState('All places'); const [place,setPlace]=useState<typeof islands[0]|null>(null); const [menu,setMenu]=useState(false);
+ const visible=islands.filter(i=>(filter==='All places'||i.type===filter)&&i.name.toLowerCase().includes(query.toLowerCase()));
+ return <><header><a className="brand" href="#home"><span className="brand-mark">☠</span><span>THE GRAND LINE<small>A ONE PIECE COMPANION</small></span></a><nav className={menu?'open':''}><a href="#home">Home</a><a href="#characters">Characters</a><a href="#world">World map</a><a href="#stories">Stories</a></nav><div className="header-right"><span className="header-note">A fan-made adventure</span><button className="play-top" onClick={()=>setGame(true)}><Gamepad2 size={16}/> PLAY A GAME</button><button className="mobile-menu" onClick={()=>setMenu(!menu)}><Menu/></button></div></header>
+ <main id="home"><section className="hero"><div className="hero-art"><div className="sun"></div><div className="cloud c1"></div><div className="cloud c2"></div><div className="island island1"></div><div className="island island2"></div><div className="ship">⛵</div><div className="waves"></div></div><div className="hero-overlay"></div><div className="hero-content"><div className="hero-kicker"><span></span> THE ULTIMATE ONE PIECE COMPANION</div><h1>Adventure is<br/><em>out there.</em></h1><p>Set sail through the world of One Piece.<br/>Discover the stories, legends, and places that<br className="desktop"/> make this journey unforgettable.</p><div className="hero-actions"><a className="button light" href="#characters">EXPLORE THE WIKI <ArrowRight size={16}/></a><a className="button outline" href="#world"><Compass size={17}/> EXPLORE THE MAP</a></div></div><div className="hero-bottom"><span>SCROLL TO EXPLORE <span>↓</span></span><span>EST. EAST BLUE &nbsp; / &nbsp; ALL SEAS WELCOME</span></div></section>
+ <div className="intro-strip"><span>☠</span><p>“Inherited will. The destiny of the age. The dreams of the people.<br/><b>These things will never be stopped.”</b></p><small>— GOL D. ROGER</small></div>
+ <section className="section characters" id="characters"><div className="section-heading"><div><div className="eyebrow">✦ &nbsp; THE PEOPLE OF THE SEA</div><h2>Meet the <em>crew.</em></h2><p>Every great adventure starts with a great crew.</p></div><a href="#crew-grid" className="text-link">MEET THE STRAW HATS <ArrowRight size={16}/></a></div><div className="character-grid" id="crew-grid">{characters.map((c,i)=><button className="character-card" key={c.name} onClick={()=>setSelected(c)}><div className="portrait" style={{backgroundColor:c.color}}><div className="portrait-number">0{i+1}</div><img src={c.image} alt={c.name} onError={e=>{e.currentTarget.style.display='none'}}/><span className="portrait-fallback">{['👒','⚔️','🍊','🍳','🩺','📚'][i]}</span><div className="card-arrow">↗</div></div><div className="character-info"><span>{c.role}</span><h3>{c.name}</h3><p>{c.epithet}</p></div></button>)}</div><div className="crew-foot">THE STRAW HAT PIRATES <span>✦</span> A CREW UNLIKE ANY OTHER</div></section>
+ <section className="world-section" id="world"><div className="world-inner"><div className="section-heading"><div><div className="eyebrow">✦ &nbsp; CHART YOUR COURSE</div><h2>A world worth <em>exploring.</em></h2><p>From the East Blue to the New World, there's always somewhere new to discover.</p></div><div className="compass-icon">✥</div></div><div className="map-layout"><div className="map-panel"><div className="map-title"><span>THE GRAND LINE</span><small>THE WORLD OF ONE PIECE</small></div><div className="map-lines"></div><div className="map-label east">PARADISE</div><div className="map-label west">THE NEW WORLD</div><div className="red-line">RED LINE</div>{visible.map(i=><button key={i.name} className={`map-pin ${place?.name===i.name?'active':''}`} style={{left:`${i.x}%`,top:`${i.y}%`}} onClick={()=>setPlace(i)}><b>{i.icon}</b><span>{i.name}</span></button>)}<div className="map-compass">✥<small>N</small></div><div className="map-caption">A WORLD OF ENDLESS ADVENTURE</div></div><div className="map-side"><div className="side-label">EXPLORE THE WORLD <Compass size={17}/></div><h3>Where to next?</h3><p>Find an island, territory, or somewhere entirely unexpected.</p><label className="search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search places..."/></label><div className="filter-row">{['All places','Island','Yonko territory'].map(f=><button key={f} className={filter===f?'active':''} onClick={()=>setFilter(f)}>{f}</button>)}</div><div className="place-list">{visible.map(i=><button key={i.name} onClick={()=>setPlace(i)} className={place?.name===i.name?'chosen':''}><span className="place-icon">{i.icon}</span><span><b>{i.name}</b><small>{i.sea} · {i.type.toUpperCase()}</small></span><ArrowRight size={15}/></button>)}{visible.length===0&&<p>No places found. Try another search.</p>}</div>{place&&<div className="place-detail"><b>{place.name}</b><p>{place.desc}</p></div>}</div></div></div></section>
+ <section className="section stories" id="stories"><div className="section-heading"><div><div className="eyebrow">✦ &nbsp; TALES FROM THE GRAND LINE</div><h2>Stories that <em>stay with us.</em></h2><p>Big dreams, impossible odds, and the bonds that carry us forward.</p></div></div><div className="story-grid"><article><span>01 / THE BEGINNING</span><h3>A boy, a hat,<br/>and a promise.</h3><p>One small promise in Foosha Village set an extraordinary journey in motion.</p><button onClick={()=>setSelected(characters[0])}>READ LUFFY'S STORY <ArrowRight size={15}/></button></article><article><span>02 / FOUND FAMILY</span><h3>Stronger<br/>together.</h3><p>Across every ocean, the Straw Hats prove that a crew is more than a team.</p><a href="#characters">MEET THE CREW <ArrowRight size={15}/></a></article><article className="game-promo"><Gamepad2 size={28}/><span>NEED A BREAK, PIRATE?</span><h3>Time for a little<br/>chaos.</h3><p>Take a break from exploring and play Straw Hat Blast.</p><button onClick={()=>setGame(true)}>LET'S PLAY <ArrowRight size={15}/></button></article></div></section></main><footer><a className="brand" href="#home"><span className="brand-mark">☠</span><span>THE GRAND LINE<small>A ONE PIECE COMPANION</small></span></a><p>Made for the dreamers, adventurers, and future Pirate Kings.</p><small>UNOFFICIAL FAN PROJECT · ONE PIECE BELONGS TO EIICHIRO ODA & ITS RESPECTIVE OWNERS</small></footer>
+ {selected&&<div className="overlay" onClick={()=>setSelected(null)}><div className="modal character-modal" onClick={e=>e.stopPropagation()}><button className="close" onClick={()=>setSelected(null)}><X size={20}/></button><div className="modal-portrait" style={{backgroundColor:selected.color}}><img src={selected.image} alt={selected.name}/></div><div className="modal-copy"><div className="eyebrow">✦ &nbsp; {selected.role} OF THE STRAW HATS</div><h2>{selected.name}</h2><h4>“{selected.epithet}”</h4><p>{selected.story}</p><div className="facts"><div><small>BOUNTY</small><b>฿ {selected.bounty}</b></div><div><small>ORIGIN</small><b>{selected.origin}</b></div></div><a href={`https://onepiece.fandom.com/wiki/${encodeURIComponent(selected.name.replace(/ /g,'_'))}`} target="_blank" rel="noreferrer">READ THE FULL STORY ↗</a></div></div></div>}{game&&<Game onClose={()=>setGame(false)}/>}</>
 }
