@@ -8,8 +8,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 3000,
     strictPort: true,
-    hmr: {
-      port: 3000,
-    },
+    // The sandbox preview is served from a dynamic *.e2b.app host.
+    allowedHosts: true,
   },
 });
