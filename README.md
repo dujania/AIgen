@@ -174,12 +174,18 @@ merged, point the same setting at `main` + `/docs` so deployments follow the def
 
 | Host | Setup |
 | --- | --- |
-| Netlify / Cloudflare Pages / Vercel | Build command `npm run build`, publish directory `dist` |
+| Netlify | Import the repo (config in `netlify.toml`), or drag `dist/` into <https://app.netlify.com/drop> |
+| Vercel | Import the repo — `vercel.json` pins the build and output directory |
+| Cloudflare Pages | Build command `npm run build`, output directory `dist` |
 | S3 / nginx / Apache | Upload `dist/`; no SPA rewrites needed because routing is hash-based (`#/jobs`) |
 | Local | `npm run build && npx serve dist` |
 
 The build has no server-side dependencies, no environment variables, and no database, so any
-static file host will do.
+static file host will do. Free tiers on Netlify, Vercel and Cloudflare Pages are more than enough
+for a personal job search.
+
+> Lovable cannot host this codebase: its GitHub integration is export-only and does not support
+> importing an existing repository, and its free plan builds projects from its own editor.
 
 ---
 
