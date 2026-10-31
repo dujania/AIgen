@@ -1,70 +1,54 @@
-import type { CSSProperties } from "react";
-import SnakeGame from "./components/SnakeGame";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import { WorkspaceProvider } from "./lib/store";
+import Dashboard from "./pages/Dashboard";
+import JobsPage from "./pages/Jobs";
+import JobDetail from "./pages/JobDetail";
+import ResumePage from "./pages/Resume";
+import ApplicationsPage from "./pages/Applications";
+import InsightsPage from "./pages/Insights";
+import Shared from "./pages/Shared";
 
-const FIREFLIES = Array.from({ length: 14 }).map((_, i) => ({
-  left: `${(i * 37 + 11) % 97}%`,
-  top: `${(i * 53 + 19) % 93}%`,
-  size: 2 + (i % 3),
-  dur: `${5.5 + (i % 5) * 1.7}s`,
-  del: `${(i * 0.9) % 6}s`,
-}));
+function NotFound() {
+  return (
+    <div className="flex min-h-[50vh] flex-col items-center justify-center text-center">
+      <p className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-muted)]">404</p>
+      <h1 className="display mt-2 text-[42px]">This page took a different job.</h1>
+      <p className="mt-2 text-[13px] text-[var(--color-muted)]">
+        The link may be old. Everything else still works.
+      </p>
+      <a href="#/" className="btn btn-primary mt-5">
+        Back to home
+      </a>
+    </div>
+  );
+}
 
 export default function App() {
   return (
-    <div className="relative h-full overflow-hidden scanlines">
-      {/* layered night-garden backdrop */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(1100px 700px at 18% -10%, rgba(44,90,58,0.55), transparent 60%)," +
-            "radial-gradient(900px 620px at 100% 15%, rgba(29,74,44,0.5), transparent 62%)," +
-            "radial-gradient(1000px 800px at 50% 118%, rgba(18,48,32,0.65), transparent 60%)," +
-            "linear-gradient(180deg, #0a1c11 0%, #07130d 55%, #050e09 100%)",
-        }}
-      />
-      {/* faint giant checkerboard */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05]"
-        style={{
-          background:
-            "repeating-conic-gradient(#a8f03e 0% 25%, transparent 0% 50%) 0 0 / 96px 96px",
-          maskImage: "radial-gradient(ellipse at 50% 42%, black 30%, transparent 78%)",
-          WebkitMaskImage: "radial-gradient(ellipse at 50% 42%, black 30%, transparent 78%)",
-        }}
-      />
-      {/* drifting fireflies */}
-      <div aria-hidden className="absolute inset-0 overflow-hidden">
-        {FIREFLIES.map((f, i) => (
-          <span
-            key={i}
-            className="firefly"
-            style={
-              {
-                left: f.left,
-                top: f.top,
-                width: f.size,
-                height: f.size,
-                "--dur": f.dur,
-                "--del": f.del,
-              } as CSSProperties
+    <WorkspaceProvider>
+      <HashRouter>
+        <Routes>
+          <Route path="/r/:payload" element={<Shared />} />
+          <Route
+            path="*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/jobs" element={<JobsPage />} />
+                  <Route path="/jobs/:id" element={<JobDetail />} />
+                  <Route path="/resume" element={<ResumePage />} />
+                  <Route path="/applications" element={<ApplicationsPage />} />
+                  <Route path="/insights" element={<InsightsPage />} />
+                  <Route path="/shared" element={<Navigate to="/" replace />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
             }
           />
-        ))}
-      </div>
-      {/* vignette */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(2,8,5,0.55) 100%)",
-        }}
-      />
-
-      <SnakeGame />
-    </div>
+        </Routes>
+      </HashRouter>
+    </WorkspaceProvider>
   );
 }

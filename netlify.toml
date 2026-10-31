@@ -1,0 +1,9 @@
+# Netlify: import the repo, or drag the dist/ folder into app.netlify.com/drop
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Routing is hash-based (#/jobs), so no SPA rewrites are required.
